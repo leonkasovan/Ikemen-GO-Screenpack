@@ -1,9 +1,5 @@
-//When converting to SPV, specify version 450
-//#version 450 core
 // Converted from ShaderToy "Clouds FBM" -> Ikemen stage BG
 // Original: cloudscale/speed/clouddark/cloudlight/cloudcover/cloudalpha/skytint + hash/noise/fbm
-// Ikemen: procedural simplex (myHash/myNoise), p0=speedScale, p1=cloudscale, p2=cover, p3=alpha
-// Usage: [Shaders] fbm = fbm_clouds.frag ; [BG 0] shader="fbm" shaderparam.p0=1
 
 #if __VERSION__ >= 450
 	#define COMPAT_TEXTURE texture

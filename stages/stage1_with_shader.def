@@ -12,7 +12,7 @@ mugenVersion = 1.1             ; Version of MUGEN the stage made for, use the (1
 author = "Gacel"               ; Stage author name.
 
 [Shaders]
-shader_test = shader_test1.frag
+shader_test1 = shader_test1.frag
 
 ; ----------------------------------------------------------
 [Camera]
@@ -230,7 +230,7 @@ start = 0, -46
 delta = 1, 1
 tile = 1, 0
 tileSpacing = 0, 0
-shader = "shader_test"
+shader = "shader_test1"
 
 ; Floor BG
 [BG 0]

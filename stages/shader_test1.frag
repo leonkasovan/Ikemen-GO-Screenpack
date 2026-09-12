@@ -1,5 +1,3 @@
-//When converting to SPV, specify version 450
-//#version 450 core
 // Converted from ShaderToy golfed https://www.shadertoy.com/view/mtyGWy (533->227 chars) → Ikemen frag format
 
 #if __VERSION__ >= 450
@@ -120,9 +118,6 @@ vec4 GetIkemenPixel(vec2 uv) {
 // ----------------------
 
 void main() {
-    // ShaderToy golf: O*=i; i++<4.  → i=1..4 in body, l = length(initial u) constant
-    // ponytail: de-golfed to valid GLSL, same math, O init 0
-
     vec2 R = iResolution.xy;
     vec2 F = gl_FragCoord.xy;
     vec2 u = (F + F - R) / R.y;          // (F+F-R)/R.y

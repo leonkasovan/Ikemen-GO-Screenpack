@@ -1,6 +1,4 @@
-//When converting to SPV, specify version 450
-//#version 450 core
-// Converted from LV_Experimentation.glsl (ShaderToy mainImage) → Ikemen distortion.frag format
+// Converted from LV_Experimentation.glsl (ShaderToy mainImage) 
 
 #if __VERSION__ >= 450
 	// VULKAN PATH
@@ -120,8 +118,6 @@ vec4 GetIkemenPixel(vec2 uv) {
 // ----------------------
 
 void main() {
-    // ShaderToy: fragCoord = gl_FragCoord.xy, iResolution/iTime from Ikemen UBO
-    // ponytail: clamp acos input to [-1,1] — original uv*1.2 can exceed and NaN without it
     float MAX_SPEED = (p0 != 0.0) ? p0 : 0.5;   // p0 = speed, default 0.5
     float MAX_SIZE  = (p1 != 0.0) ? p1 : 10.0;  // p1 = size,  default 10.0
     float Degrees   = degrees(1.0);
