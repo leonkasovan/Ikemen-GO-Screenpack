@@ -193,6 +193,7 @@
  ;Insert your characters below.
 
 kfm_zss, stages/kfm.def
+kfm_zss_s, stages/kfm.def
 kfm720, stages/kfm.def, order=0
 kfm_zaxis, stages/kfm.def, order=0
 randomselect
@@ -267,12 +268,15 @@ randomselect
  ;Insert your stages below.
 
 stages/stage1.def
+stages/stage1_with_shader.def
 stages/stage3d.def
 stages/stage3d_outline.def
 stages/stageZ.def
 stages/interactivestage.def
 stages/kfm.def
+stages/kfm_with_shader.def
 stages/stage0.def
+stages/stage0_with_shader.def
 stages/stage0-720.def
 
 ;-------------------------------------------------------------------------------
