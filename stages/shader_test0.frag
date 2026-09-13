@@ -133,5 +133,12 @@ void main() {
 
     vec3 col = vec3(d, 0.5, 0.7);
 
-    FragColor = vec4(col, 1.0);
+    #ifdef GL_ES
+        // Mali r13p0 keep-alive: sampler must stay active or the program outputs black.
+        vec4 t = COMPAT_TEXTURE(tex, texcoord);
+        float keep = step(t.a, -1.0);
+        FragColor = vec4(col, 1.0) + keep;
+    #else
+        FragColor = vec4(col, 1.0);
+    #endif
 }

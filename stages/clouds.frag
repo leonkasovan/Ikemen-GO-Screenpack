@@ -96,7 +96,8 @@ float ctNoise(in vec2 p){
 }
 float fbm(vec2 n){
 	float total = 0.0, amplitude = 0.1;
-	for(int i=0; i<7; i++){
+	// ponytail: 4 octaves (was 7) — Mali-G31 fill-rate bound
+	for(int i=0; i<4; i++){
 		total += ctNoise(n) * amplitude;
 		n = ctM * n;
 		amplitude *= 0.4;
@@ -105,7 +106,7 @@ float fbm(vec2 n){
 }
 
 void main(){
-	// ponytail: 30 noise taps/pixel, lower loop counts if slow
+	// ponytail: 22 noise taps/pixel (was 37), tuned for Mali-G31 fill rate
 	vec2 fragCoord = gl_FragCoord.xy;
 	vec2 p = fragCoord.xy / iResolution.xy;
 	vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);
@@ -122,7 +123,7 @@ void main(){
 	uv.x += q - time;  // Only horizontal movement (x component)
 	// uv.y unchanged for pure horizontal movement
 	float weight = 0.8;
-	for(int i=0; i<8; i++){
+	for(int i=0; i<5; i++){
 		r += abs(weight*ctNoise(uv));
 		uv = ctM*uv + vec2(time, 0.0);  // Only add time to x component
 		weight *= 0.7;
@@ -133,7 +134,7 @@ void main(){
 	uv *= cs;
 	uv.x += q - time;  // Only horizontal movement (x component)
 	weight = 0.7;
-	for(int i=0; i<8; i++){
+	for(int i=0; i<5; i++){
 		f += weight*ctNoise(uv);
 		uv = ctM*uv + vec2(time, 0.0);  // Only add time to x component
 		weight *= 0.6;
@@ -147,7 +148,7 @@ void main(){
 	uv *= cs*2.0;
 	uv.x += q - time;  // Only horizontal movement (x component)
 	weight = 0.4;
-	for(int i=0; i<7; i++){
+	for(int i=0; i<4; i++){
 		c += weight*ctNoise(uv);
 		uv = ctM*uv + vec2(time, 0.0);  // Only add time to x component
 		weight *= 0.6;
@@ -158,7 +159,7 @@ void main(){
 	uv *= cs*3.0;
 	uv.x += q - time;  // Only horizontal movement (x component)
 	weight = 0.4;
-	for(int i=0; i<7; i++){
+	for(int i=0; i<4; i++){
 		c1 += abs(weight*ctNoise(uv));
 		uv = ctM*uv + vec2(time, 0.0);  // Only add time to x component
 		weight *= 0.6;
@@ -169,5 +170,13 @@ void main(){
 	vec3 cloudcolour = vec3(1.1,1.1,0.9) * clamp((clouddark + cloudlight*c), 0.0, 1.0);
 	f = ccov + calp*f*r;
 	vec3 result = mix(skycolour, clamp(skytint * skycolour + cloudcolour, 0.0, 1.0), clamp(f + c, 0.0, 1.0));
-	FragColor = vec4(result, 1.0);
+	#ifdef GL_ES
+		// Mali r13p0 keep-alive: sampler must stay active or the program outputs black.
+		// step(t.a, -1.0) is always 0 (alpha >= 0) but not constant-foldable.
+		vec4 t = COMPAT_TEXTURE(tex, texcoord);
+		float keep = step(t.a, -1.0);
+		FragColor = vec4(result, 1.0) + keep;
+	#else
+		FragColor = vec4(result, 1.0);
+	#endif
 }

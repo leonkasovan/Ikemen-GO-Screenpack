@@ -138,5 +138,12 @@ void main() {
         O += glow * col;
     }
 
-    FragColor = vec4(O.rgb, 1.0);
+    // Mali r13p0 keep-alive: sampler must stay active or the program outputs black.
+    #ifdef GL_ES
+        vec4 t = COMPAT_TEXTURE(tex, texcoord);
+        float keep = step(t.a, -1.0);
+        FragColor = vec4(O.rgb, 1.0) + keep;
+    #else
+        FragColor = vec4(O.rgb, 1.0);
+    #endif
 }
